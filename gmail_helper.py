@@ -72,10 +72,13 @@ def email(sender, to, subject, text, html):
 def get_emails(filename):
     # Reads a text file for emails, first is the sender, rest are recipients
     # Removes lines starting with '#'
+    remove_lines = []
     with open(filename) as f:
         emails = f.read().splitlines()
     for line in emails:
         if line[0] == '#':
-            emails.remove(line)
+            remove_lines.append(line)
+    for line in remove_lines:
+        emails.remove(line)
     sender = emails.pop(0)
     return sender, emails
