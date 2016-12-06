@@ -68,3 +68,14 @@ def email(sender, to, subject, text, html):
     service = create_service()
     message = create_message(sender, to, subject, text, html)
     send_message(service, 'me', message)
+
+def get_emails(filename):
+    # Reads a text file for emails, first is the sender, rest are recipients
+    # Removes lines starting with '#'
+    with open(filename) as f:
+        emails = f.read().splitlines()
+    for line in emails:
+        if line[0] == '#':
+            emails.remove(line)
+    sender = emails.pop(0)
+    return sender, emails
