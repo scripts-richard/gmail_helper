@@ -21,6 +21,7 @@ SCOPES = 'https://www.googleapis.com/auth/gmail.send'
 CLIENT_SECRET_FILE = '../client_secret.json'
 APPLICATION_NAME = 'Gmail API Quickstart'
 
+
 def create_message(sender, to, subject, message_text, message_html):
     message = MIMEMultipart('alternative')
     message['to'] = ', '.join(to)
@@ -30,22 +31,24 @@ def create_message(sender, to, subject, message_text, message_html):
     part2 = MIMEText(message_html, 'html')
     message.attach(part1)
     message.attach(part2)
-    return{'raw' : base64.urlsafe_b64encode(message.as_bytes()).decode()}
+    return{'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()}
+
 
 def send_message(service, user_id, message):
     try:
-        message = (service.users().messages().send(userId=user_id, body=message).execute())
+        message = (service.users().messages().send(userId=user_id, body=message).execute()) # noqa
         print('Message Id: ', message['id'])
         return message
     except error.HTTPError:
         print('An error occurred: ', error.HTTPError)
+
 
 def get_credentials():
     home_dir = os.path.expanduser('~')
     credential_dir = os.path.join(home_dir, '.credentials')
     if not os.path.exists(credential_dir):
         os.makedirs(credential_dir)
-    credential_path = os.path.join(credential_dir, 'gmail-python-quickstart.json')
+    credential_path = os.path.join(credential_dir, 'gmail-python-quickstart.json') # noqa
     store = Storage(credential_path)
     credentials = store.get()
     if not credentials or credentials.invalid:
@@ -58,16 +61,19 @@ def get_credentials():
         print('Storing credentials to', credential_path)
     return credentials
 
+
 def create_service():
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     service = discovery.build('gmail', 'v1', http=http)
     return service
 
+
 def email(sender, to, subject, text, html):
     service = create_service()
     message = create_message(sender, to, subject, text, html)
     send_message(service, 'me', message)
+
 
 def get_emails(filename):
     # Reads a text file for emails, first is the sender, rest are recipients
