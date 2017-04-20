@@ -36,7 +36,8 @@ def create_message(sender, to, subject, message_text, message_html):
 
 def send_message(service, user_id, message):
     try:
-        message = (service.users().messages().send(userId=user_id, body=message).execute()) # noqa
+        message = (service.users().messages().send(userId=user_id,
+                                                   body=message).execute())
         print('Message Id: ', message['id'])
         return message
     except error.HTTPError:
@@ -48,7 +49,8 @@ def get_credentials():
     credential_dir = os.path.join(home_dir, '.credentials')
     if not os.path.exists(credential_dir):
         os.makedirs(credential_dir)
-    credential_path = os.path.join(credential_dir, 'gmail-python-quickstart.json') # noqa
+    credential_path = os.path.join(credential_dir,
+                                   'gmail-python-quickstart.json')
     store = Storage(credential_path)
     credentials = store.get()
     if not credentials or credentials.invalid:
